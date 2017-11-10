@@ -1,7 +1,12 @@
 yii2-oauth2-server
 ==================
 
-A wrapper for implementing an OAuth2 Server(https://github.com/bshaffer/oauth2-server-php)
+A wrapper for implementing an
+[OAuth2 Server](https://github.com/bshaffer/oauth2-server-php).
+
+This project was forked from
+[Filsh Original Project](https://github.com/Filsh/yii2-oauth2-server) but the
+changes are not transparent, read [UPGRADE.md] to pass to the latest version.
 
 Installation
 ------------
@@ -11,68 +16,126 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist filsh/yii2-oauth2-server "*"
+php composer.phar require --prefer-dist tecnocen/yii2-oauth2-server "*"
 ```
 
 or add
 
 ```json
-"filsh/yii2-oauth2-server": "*"
+"tecnocen/yii2-oauth2-server": "~2.1"
 ```
 
 to the require section of your composer.json.
 
-To use this extension,  simply add the following code in your application configuration:
+Usage
+-----
+
+To use this extension,  simply add the following code in your application configuration as a new module:
 
 ```php
-'oauth2' => [
-    'class' => 'filsh\yii2\oauth2server\Module',
-    'options' => [
-        'token_param_name' => 'accessToken',
-        'access_lifetime' => 3600 * 24
-    ],
-    'storageMap' => [
-        'user_credentials' => 'common\models\User'
-    ],
-    'grantTypes' => [
-        'client_credentials' => [
-            'class' => 'OAuth2\GrantType\ClientCredentials',
-            'allow_public_clients' => false
-        ],
-        'user_credentials' => [
-            'class' => 'OAuth2\GrantType\UserCredentials'
-        ],
-        'refresh_token' => [
-            'class' => 'OAuth2\GrantType\RefreshToken',
-            'always_issue_new_refresh_token' => true
+'modules'=>[
+        //other modules .....
+        'oauth2' => [
+            'class' => 'tecnocen\oauth2server\Module',            
+            'tokenParamName' => 'accessToken',
+            'tokenAccessLifetime' => 3600 * 24,
+            'storageMap' => [
+                'user_credentials' => 'app\models\User',
+            ],
+            'grantTypes' => [
+                'user_credentials' => [
+                    'class' => 'OAuth2\GrantType\UserCredentials',
+                ],
+                'refresh_token' => [
+                    'class' => 'OAuth2\GrantType\RefreshToken',
+                    'always_issue_new_refresh_token' => true
+                ]
+            ]
         ]
     ],
-]
 ```
 
-```common\models\User``` - user model implementing an interface ```\OAuth2\Storage\UserCredentialsInterface```, so the oauth2 credentials data stored in user table
+### JWT tokens
+
+There is no JWT token support on this fork, feel free to submit a
+(pull request)[https://github.com/tecnocen-com/yii2-oauth2-server/pulls] to
+enable this functionality.
+
+### UserCredentialsInterface
+
+The class passed to `Yii::$app->user->identityClass` must implement the interface
+`\OAuth2\Storage\UserCredentialsInterface`, to store oauth2 credentials in user
+table.
+
+```php
+use Yii;
+
+class User extends common\models\User
+    implements \OAuth2\Storage\UserCredentialsInterface
+{
+
+    /**
+     * Implemented for Oauth2 Interface
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        /** @var \tecnocen\oauth2server\Module $module */
+        $module = Yii::$app->getModule('oauth2');
+        $token = $module->getServer()->getResourceController()->getToken();
+        return !empty($token['user_id'])
+                    ? static::findIdentity($token['user_id'])
+                    : null;
+    }
+
+    /**
+     * Implemented for Oauth2 Interface
+     */
+    public function checkUserCredentials($username, $password)
+    {
+        $user = static::findByUsername($username);
+        if (empty($user)) {
+            return false;
+        }
+        return $user->validatePassword($password);
+    }
+
+    /**
+     * Implemented for Oauth2 Interface
+     */
+    public function getUserDetails($username)
+    {
+        $user = static::findByUsername($username);
+        return ['user_id' => $user->getId()];
+    }
+}
+```
+
+### Migrations
 
 The next step your shold run migration
 
 ```php
-yii migrate --migrationPath=@vendor/filsh/yii2-oauth2-server/migrations
+yii migrate --migrationPath=@tecnocen/oauth2server/migrations/tables
+yii fixture all --migrationPath=@tecnocen/oauth2server/fixtures
 ```
 
-this migration create the oauth2 database scheme and insert test user credentials ```testclient:testpass``` for ```http://fake/```
+this migration create the oauth2 database scheme. The second command insert
+test user credentials ```testclient:testpass``` for ```http://fake/```
 
-add url rule to urlManager
+
+### urlManager
 
 ```php
 'urlManager' => [
+    'enablePrettyUrl' => true, //only if you want to use petty URLs
     'rules' => [
-        'POST oauth2/<action:\w+>' => 'oauth2/default/<action>',
+        'POST oauth2/<action:\w+>' => 'oauth2/rest/<action>',
         ...
     ]
 ]
 ```
 
-Usage
------
+### Controllers
 
 To use this extension,  simply add the behaviors for your base controller:
 
@@ -80,8 +143,8 @@ To use this extension,  simply add the behaviors for your base controller:
 use yii\helpers\ArrayHelper;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
-use filsh\yii2\oauth2server\filters\ErrorToExceptionFilter;
-use filsh\yii2\oauth2server\filters\auth\CompositeAuth;
+use tecnocen\oauth2server\filters\ErrorToExceptionFilter;
+use tecnocen\oauth2server\filters\auth\CompositeAuth;
 
 class Controller extends \yii\rest\Controller
 {
@@ -92,18 +155,35 @@ class Controller extends \yii\rest\Controller
     {
         return ArrayHelper::merge(parent::behaviors(), [
             'authenticator' => [
-                'class' => CompositeAuth::className(),
+                'class' => CompositeAuth::class,
                 'authMethods' => [
-                    ['class' => HttpBearerAuth::className()],
-                    ['class' => QueryParamAuth::className(), 'tokenParam' => 'accessToken'],
+                    ['class' => HttpBearerAuth::class],
+                    ['class' => QueryParamAuth::class, 'tokenParam' => 'accessToken'],
                 ]
             ],
             'exceptionFilter' => [
-                'class' => ErrorToExceptionFilter::className()
+                'class' => ErrorToExceptionFilter::class
             ],
         ]);
     }
 }
+```
+
+### Generate Token with JS
+
+To get access token (js example):
+
+```js
+var url = window.location.host + "/oauth2/token";
+var data = {
+    'grant_type':'password',
+    'username':'<some login from your user table>',
+    'password':'<real pass>',
+    'client_id':'testclient',
+    'client_secret':'testpass'
+};
+//ajax POST `data` to `url` here
+//
 ```
 
 For more, see https://github.com/bshaffer/oauth2-server-php
