@@ -1,8 +1,8 @@
 <?php
 
-use tecnocen\rmdb\migrations\CreatePivot;
+use tecnocen\oauth2server\migrations\tables\CreateTable;
 
-class m140501_015315_oauth_scopes extends CreatePivot
+class m140501_075315_oauth_scopes extends CreateTable
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class m140501_015315_oauth_scopes extends CreatePivot
     public function columns()
     {
         return [
-            'scope' => $this->primaryKey(2000),
-            'is_default' => $this->active(),
+            'scope' => $this->primaryKey(200),
+            'is_default' => $this->boolean(),
         ];
     }
 }

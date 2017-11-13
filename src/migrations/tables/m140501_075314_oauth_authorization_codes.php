@@ -1,8 +1,8 @@
 <?php
 
-use tecnocen\rmdb\migrations\CreatePivot;
+use tecnocen\oauth2server\migrations\tables\CreateTable;
 
-class m140501_015314_oauth_authorization_codes extends CreatePivot
+class m140501_075314_oauth_authorization_codes extends CreateTable
 {
     /**
      * @inheritdoc
@@ -33,7 +33,10 @@ class m140501_015314_oauth_authorization_codes extends CreatePivot
     public function foreignKeys()
     {
         return [
-            'client_id' => 'oauth_clients',
+            'client_id' => [
+                'table' => 'oauth_clients',
+                'columns' => ['client_id' => 'client_id'],
+            ],
         ];
     }
 }

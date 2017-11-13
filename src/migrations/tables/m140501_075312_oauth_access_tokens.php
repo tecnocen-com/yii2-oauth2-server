@@ -1,15 +1,15 @@
 <?php
 
-use tecnocen\rmdb\migrations\CreatePivot;
+use tecnocen\oauth2server\migrations\tables\CreateTable;
 
-class m140501_015312_oauth_access_tokens extends CreatePivot
+class m140501_075312_oauth_access_tokens extends CreateTable
 {
     /**
      * @inheritdoc
      */
     public function getTableName()
     {
-        return 'oauth_clients';
+        return 'oauth_access_tokens';
     }
 
     /**
@@ -32,7 +32,10 @@ class m140501_015312_oauth_access_tokens extends CreatePivot
     public function foreignKeys()
     {
         return [
-            'client_id' => 'oauth_clients',
+            'client_id' => [
+                'table' => 'oauth_clients',
+                'columns' => ['client_id' => 'client_id'],
+            ],
         ];
     }
 }

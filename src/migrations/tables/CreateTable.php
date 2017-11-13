@@ -2,7 +2,7 @@
 
 namespace tecnocen\oauth2server\migrations\tables;
 
-class CreateTable extends \tecnocen\migrate\CreateTable
+abstract class CreateTable extends \tecnocen\migrate\CreateTableMigration
 {
     /**
      * @inheritdoc

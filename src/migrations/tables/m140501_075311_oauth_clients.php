@@ -2,7 +2,7 @@
 
 use tecnocen\oauth2server\migrations\tables\CreateTable;
 
-class m140501_015311_oauth_clients extends CreateTable
+class m140501_075311_oauth_clients extends CreateTable
 {
     /**
      * @inheritdoc
