@@ -7,7 +7,7 @@ use tecnocen\oauth2server\models\OauthClients;
 /**
  * Fixture to load default clients.
  */
-class OauthClientsFixtures extends \yii\test\ActiveFixture
+class OauthClientsFixture extends \yii\test\ActiveFixture
 {
     /**
      * @inheritdoc
@@ -17,5 +17,5 @@ class OauthClientsFixtures extends \yii\test\ActiveFixture
     /**
      * @inheritdoc
      */
-    public $dataFile = __DATA__ . '/data/clients.php';
+    public $dataFile = __DIR__ . '/data/clients.php';
 }
