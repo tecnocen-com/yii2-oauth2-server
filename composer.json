@@ -1,32 +1,45 @@
 {
-    "name": "filsh/yii2-oauth2-server",
+    "name": "tecnocen/yii2-oauth2-server",
     "description": "OAuth2 Server for PHP",
     "keywords": ["yii", "extension", "module", "oauth", "oauth2"],
-    "homepage": "https://github.com/filsh/yii2-oauth2-server",
+    "homepage": "https://github.com/tecnocen-com/yii2-oauth2-server",
     "type": "yii2-extension",
     "license": "MIT",
     "support": {
-        "email": "imaliy.filsh@gmail.com",
-        "source": "https://github.com/filsh/yii2-oauth2-server"
+        "source": "https://github.com/tecnocen-com/yii2-oauth2-server"
     },
     "authors": [
         {
             "name": "Igor Maliy",
             "email": "imaliy.filsh@gmail.com"
+        },
+        {
+            "name": "Angel (Faryshta) Guevara",
+            "email": "aguevara@solmipro.com"
         }
     ],
     "require": {
-        "yiisoft/yii2": "*",
-        "bshaffer/oauth2-server-php": "v1.3"
+        "php": ">=5.6",
+        "bshaffer/oauth2-server-php": "~1.3",
+        "tecnocen/yii2-migrate": "*",
+        "yiisoft/yii2": "~2.0.12"
+    },
+    "require-dev": {
+        "codeception/base": "^2.2.11",
+        "codeception/verify": "~0.3.1"
+    },
+    "scripts": {
+        "deploy-tests": [
+            "@php tests/_app/yii.php migrate -p=@tecnocen/oauth2server/migrations/tables --interactive=0",
+            "@php tests/_app/yii.php migrate -p=@app/migrations/ --interactive=0"
+        ],
+        "run-tests": [
+            "@php vendor/bin/codecept run --steps"
+        ]
     },
     "autoload": {
         "psr-4": {
-            "filsh\\yii2\\oauth2server\\": ""
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "tecnocen\\oauth2server\\": "src/"
         }
     }
 }

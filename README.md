@@ -1,7 +1,12 @@
 yii2-oauth2-server
 ==================
 
-A wrapper for implementing an OAuth2 Server(https://github.com/bshaffer/oauth2-server-php)
+A wrapper for implementing an
+[OAuth2 Server](https://github.com/bshaffer/oauth2-server-php).
+
+This project was forked from
+[Filsh Original Project](https://github.com/Filsh/yii2-oauth2-server) but the
+changes are not transparent, read [UPGRADE.md] to pass to the latest version.
 
 Installation
 ------------
@@ -11,16 +16,19 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist filsh/yii2-oauth2-server "*"
+php composer.phar require --prefer-dist tecnocen/yii2-oauth2-server "*"
 ```
 
 or add
 
 ```json
-"filsh/yii2-oauth2-server": "~2.0"
+"tecnocen/yii2-oauth2-server": "~2.1"
 ```
 
 to the require section of your composer.json.
+
+Usage
+-----
 
 To use this extension,  simply add the following code in your application configuration as a new module:
 
@@ -28,7 +36,7 @@ To use this extension,  simply add the following code in your application config
 'modules'=>[
         //other modules .....
         'oauth2' => [
-            'class' => 'filsh\yii2\oauth2server\Module',            
+            'class' => 'tecnocen\oauth2server\Module',            
             'tokenParamName' => 'accessToken',
             'tokenAccessLifetime' => 3600 * 24,
             'storageMap' => [
@@ -121,6 +129,7 @@ class PublicKeyStorage implements \OAuth2\Storage\PublicKeyInterface{
 ```
 **NOTE:** You will need [this](https://github.com/bshaffer/oauth2-server-php/pull/690) PR applied or you can patch it yourself by checking changes in [this diff](https://github.com/hosannahighertech/oauth2-server-php/commit/ec79732663547065c041e279109137a423eac0cb). The other part of PR is only if you want to use firebase JWT library (which is not mandatory anyway).
 
+<<<<<<< HEAD
 Also, extend ```common\models\User``` - user model - implementing the interface ```\OAuth2\Storage\UserCredentialsInterface```, so the oauth2 credentials data stored in user table.
 You should implement:
 - findIdentityByAccessToken()
@@ -132,6 +141,25 @@ You can extend the model if you prefer it (please, remember to update the config
 use Yii;
 
 class User extends common\models\User implements \OAuth2\Storage\UserCredentialsInterface
+=======
+### JWT tokens
+
+There is no JWT token support on this fork, feel free to submit a
+(pull request)[https://github.com/tecnocen-com/yii2-oauth2-server/pulls] to
+enable this functionality.
+
+### UserCredentialsInterface
+
+The class passed to `Yii::$app->user->identityClass` must implement the interface
+`\OAuth2\Storage\UserCredentialsInterface`, to store oauth2 credentials in user
+table.
+
+```php
+use Yii;
+
+class User extends common\models\User
+    implements \OAuth2\Storage\UserCredentialsInterface
+>>>>>>> fork
 {
 
     /**
@@ -139,7 +167,7 @@ class User extends common\models\User implements \OAuth2\Storage\UserCredentials
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        /** @var \filsh\yii2\oauth2server\Module $module */
+        /** @var \tecnocen\oauth2server\Module $module */
         $module = Yii::$app->getModule('oauth2');
         $token = $module->getServer()->getResourceController()->getToken();
         return !empty($token['user_id'])
@@ -170,15 +198,20 @@ class User extends common\models\User implements \OAuth2\Storage\UserCredentials
 }
 ```
 
+### Migrations
+
 The next step your shold run migration
 
 ```php
-yii migrate --migrationPath=@vendor/filsh/yii2-oauth2-server/migrations
+yii migrate --migrationPath=@tecnocen/oauth2server/migrations/tables
+yii fixture all --migrationPath=@tecnocen/oauth2server/fixtures
 ```
 
-this migration create the oauth2 database scheme and insert test user credentials ```testclient:testpass``` for ```http://fake/```
+this migration create the oauth2 database scheme. The second command insert
+test user credentials ```testclient:testpass``` for ```http://fake/```
 
-add url rule to urlManager
+
+### urlManager
 
 ```php
 'urlManager' => [
@@ -190,8 +223,7 @@ add url rule to urlManager
 ]
 ```
 
-Usage
------
+### Controllers
 
 To use this extension,  simply add the behaviors for your base controller:
 
@@ -199,8 +231,8 @@ To use this extension,  simply add the behaviors for your base controller:
 use yii\helpers\ArrayHelper;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
-use filsh\yii2\oauth2server\filters\ErrorToExceptionFilter;
-use filsh\yii2\oauth2server\filters\auth\CompositeAuth;
+use tecnocen\oauth2server\filters\ErrorToExceptionFilter;
+use tecnocen\oauth2server\filters\auth\CompositeAuth;
 
 class Controller extends \yii\rest\Controller
 {
@@ -211,19 +243,21 @@ class Controller extends \yii\rest\Controller
     {
         return ArrayHelper::merge(parent::behaviors(), [
             'authenticator' => [
-                'class' => CompositeAuth::className(),
+                'class' => CompositeAuth::class,
                 'authMethods' => [
-                    ['class' => HttpBearerAuth::className()],
-                    ['class' => QueryParamAuth::className(), 'tokenParam' => 'accessToken'],
+                    ['class' => HttpBearerAuth::class],
+                    ['class' => QueryParamAuth::class, 'tokenParam' => 'accessToken'],
                 ]
             ],
             'exceptionFilter' => [
-                'class' => ErrorToExceptionFilter::className()
+                'class' => ErrorToExceptionFilter::class
             ],
         ]);
     }
 }
 ```
+
+### Generate Token with JS
 
 To get access token (js example):
 
