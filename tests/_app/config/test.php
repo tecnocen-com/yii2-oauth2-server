@@ -9,6 +9,7 @@ return [
         '@vendor' => VENDOR_DIR,
         '@bower' => VENDOR_DIR . '/bower',
     ],
+    'bootstrap' => ['oauth2'],
     'modules' => [
         'oauth2' => [
             'class' => tecnocen\oauth2server\Module::class,
@@ -37,7 +38,6 @@ return [
         'urlManager' => [
             'showScriptName' => true,
             'enablePrettyUrl' => true,
-            'rules' => ['POST oauth2/<action:\w+>' => 'oauth2/rest/<action>'],
         ],
         'request' => [
             'cookieValidationKey' => 'test',

@@ -34,12 +34,12 @@ use yii\web\UrlRule;
  * ]
  * ```
  */
-class Module extends \yii\base\Module
+class Module extends \yii\base\Module implements BootstrapInterface
 {
     /**
      * @inheritdoc
      */
-    public function createUrlRules()
+    public function urlRules()
     {
         return [
             [
@@ -106,19 +106,12 @@ class Module extends \yii\base\Module
         'scope' => storage\Pdo::class,
     ];
 
-    /**
-     * @inheritdoc
-     */
-    public function init()
+    public function beforeAction($action)
     {
-        parent::init();
-        $app = Yii::$app;
-
-        if ($app instanceof \yii\console\Application) {
-            $this->controllerNamespace = commands::class;
+        if (!parent::beforeAction($action)) {
+            return false;
         }
 
-        $this->registerTranslations($app);
         $this->modelMap = array_merge($this->defaultModelMap, $this->modelMap);
         $this->storageMap = array_merge($this->defaultStorageMap, $this->storageMap);
         foreach ($this->modelMap as $name => $definition) {
@@ -163,6 +156,22 @@ class Module extends \yii\base\Module
         ]));
         $this->set('request', Request::createFromGlobals());
         $this->set('response', new Response());
+
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function bootstrap($app)
+    {
+        if ($app instanceof \yii\web\Application) {
+            $app->getUrlManager()->addRules($this->urlRules());
+        } else {
+            $this->controllerNamespace = commands::class;
+        }
+
+        $this->registerTranslations($app);
     }
 
     /**
