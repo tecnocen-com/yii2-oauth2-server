@@ -15,14 +15,17 @@ class RestController extends \yii\rest\Controller
     {
         return ArrayHelper::merge(parent::behaviors(), [
             'exceptionFilter' => [
-                'class' => ErrorToExceptionFilter::className()
+                'class' => ErrorToExceptionFilter::class,
             ],
         ]);
     }
-    
+
+    /**
+     * Action to generate oauth2 tokens.
+     */
     public function actionToken()
     {
-        $response = $this->module->getServer()->handleTokenRequest();
-        return $response->getParameters();
+        return $this->module->getServer()->handleTokenRequest()
+            ->getParameters();
     }
 }

@@ -24,15 +24,21 @@ class ErrorToExceptionFilter extends \yii\base\Behavior
      */
     public function afterAction($event)
     {
-        $response = Yii::$app->getModule('oauth2')->getServer()->getResponse();
+        $response = $this->owner->module->getServer()->getResponse();
 
-        $isValid = true;
-        if($response !== null) {
-            $isValid = $response->isInformational() || $response->isSuccessful() || $response->isRedirection();
+        if($response === null 
+            || $response->isInformational()
+            || $response->isSuccessful()
+            || $response->isRedirection()
+        ) {
+            return;
         }
-        if(!$isValid) {
-            throw new HttpException($response->getStatusCode(), $this->getErrorMessage($response), $response->getParameter('error_uri'));
-        }
+
+        throw new HttpException(
+            $response->getStatusCode(),
+            $this->getErrorMessage($response),
+            $response->getParameter('error_uri')
+        );
     }
     
     protected function getErrorMessage(\OAuth2\Response $response)

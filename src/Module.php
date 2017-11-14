@@ -2,10 +2,9 @@
 
 namespace tecnocen\oauth2server;
 
-use Oauth2\Request;
-use Oauth2\Response;
+use OAuth2\Request;
+use OAuth2\Response;
 use ReflectionClass;
-use tecnocen\roa\urlRules\UrlRuleCreator;
 use Yii;
 use yii\base\BootstrapInterface;
 use yii\base\InvalidConfigException;
@@ -35,8 +34,7 @@ use yii\web\UrlRule;
  * ]
  * ```
  */
-class Module extends \yii\base\Module
-    implements BootstrapInterface, UrlRuleCreator
+class Module extends \yii\base\Module implements BootstrapInterface
 {
     /**
      * @inheritdoc
@@ -115,26 +113,17 @@ class Module extends \yii\base\Module
     {
         $this->modelMap = array_merge($this->defaultModelMap, $this->modelMap);
         $this->storageMap = array_merge($this->defaultStorageMap, $this->storageMap);
-        foreach ($this->_modelMap as $name => $definition) {
+        foreach ($this->modelMap as $name => $definition) {
             Yii::$container->set(models::class . '\\' . $name, $definition);
         }
 
-        foreach ($this->_storageMap as $name => $definition) {
+        foreach ($this->storageMap as $name => $definition) {
             Yii::$container->set($name, $definition);
         }
 
         if ($app instanceof \yii\console\Application) {
             $this->controllerNamespace = commands::class;
         }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function init()
-    {
-        parent::init();
-        $this->registerTranslations();
 
         $storages = [];
         foreach(array_keys($this->storageMap) as $name) {
@@ -170,6 +159,15 @@ class Module extends \yii\base\Module
         ]));
         $this->set('request', Request::createFromGlobals());
         $this->set('response', new Response());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
+        $this->registerTranslations();
     }
 
     /**
@@ -209,8 +207,8 @@ class Module extends \yii\base\Module
      */
     public function registerTranslations()
     {
-        if(!isset(Yii::$app->get('i18n')->translations['modules/oauth2/*'])) {
-            Yii::$app->get('i18n')->translations['modules/oauth2/*'] = [
+        if(!isset(Yii::$app->get('i18n')->translations['tecnocen/oauth2/*'])) {
+            Yii::$app->get('i18n')->translations['tecnocen/oauth2/*'] = [
                 'class'    => PhpMessageSource::class,
                 'basePath' => __DIR__ . '/messages',
             ];
