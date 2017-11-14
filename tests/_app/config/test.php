@@ -9,7 +9,6 @@ return [
         '@vendor' => VENDOR_DIR,
         '@bower' => VENDOR_DIR . '/bower',
     ],
-    'bootstrap' => ['oauth2'],
     'modules' => [
         'oauth2' => [
             'class' => tecnocen\oauth2server\Module::class,

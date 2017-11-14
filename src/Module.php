@@ -34,7 +34,7 @@ use yii\web\UrlRule;
  * ]
  * ```
  */
-class Module extends \yii\base\Module implements BootstrapInterface
+class Module extends \yii\base\Module
 {
     /**
      * @inheritdoc
@@ -109,8 +109,16 @@ class Module extends \yii\base\Module implements BootstrapInterface
     /**
      * @inheritdoc
      */
-    public function bootstrap($app)
+    public function init()
     {
+        parent::init();
+        $app = Yii::$app;
+
+        if ($app instanceof \yii\console\Application) {
+            $this->controllerNamespace = commands::class;
+        }
+
+        $this->registerTranslations($app);
         $this->modelMap = array_merge($this->defaultModelMap, $this->modelMap);
         $this->storageMap = array_merge($this->defaultStorageMap, $this->storageMap);
         foreach ($this->modelMap as $name => $definition) {
@@ -119,10 +127,6 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
         foreach ($this->storageMap as $name => $definition) {
             Yii::$container->set($name, $definition);
-        }
-
-        if ($app instanceof \yii\console\Application) {
-            $this->controllerNamespace = commands::class;
         }
 
         $storages = [];
@@ -162,15 +166,6 @@ class Module extends \yii\base\Module implements BootstrapInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public function init()
-    {
-        parent::init();
-        $this->registerTranslations();
-    }
-
-    /**
      * Gets Oauth2 Server
      *
      * @return Server
@@ -202,13 +197,11 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     /**
      * Register translations for this module
-     *
-     * @return array
      */
-    public function registerTranslations()
+    public function registerTranslations($app)
     {
-        if(!isset(Yii::$app->get('i18n')->translations['tecnocen/oauth2/*'])) {
-            Yii::$app->get('i18n')->translations['tecnocen/oauth2/*'] = [
+        if(!isset($app->get('i18n')->translations['tecnocen/oauth2/*'])) {
+            $app->get('i18n')->translations['tecnocen/oauth2/*'] = [
                 'class'    => PhpMessageSource::class,
                 'basePath' => __DIR__ . '/messages',
             ];

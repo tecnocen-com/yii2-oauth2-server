@@ -4,6 +4,7 @@ namespace app\models;
 
 use tecnocen\oauth2server\models\OauthAccessTokens as AccessToken;
 use OAuth2\Storage\UserCredentialsInterface;
+use Yii;
 use yii\web\IdentityInterface;
 
 class User extends \yii\db\ActiveRecord implements UserCredentialsInterface
@@ -39,7 +40,7 @@ class User extends \yii\db\ActiveRecord implements UserCredentialsInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $usernamei]);
+        return static::findOne(['username' => $username]);
     }
 
     /**
