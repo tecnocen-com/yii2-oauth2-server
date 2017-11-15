@@ -56,7 +56,7 @@ To use this extension,  simply add the following code in your application config
     ],
 ```
 
-Bootstrap ill initialize translation and add the required url rules to
+Bootstrap will initialize translation and add the required url rules to
 `Yii::$app->urlManager`.
 
 ### JWT tokens
