@@ -26,7 +26,7 @@ class ErrorToExceptionFilter extends \yii\base\Behavior
     {
         $response = $this->owner->module->getServer()->getResponse();
 
-        if($response === null 
+        if($response === null
             || $response->isInformational()
             || $response->isSuccessful()
             || $response->isRedirection()
@@ -40,13 +40,16 @@ class ErrorToExceptionFilter extends \yii\base\Behavior
             $response->getParameter('error_uri')
         );
     }
-    
+
     protected function getErrorMessage(\OAuth2\Response $response)
     {
-        $message = Module::t('common', $response->getParameter('error_description'));
-        if($message === null) {
-            $message = Module::t('common', 'An internal server error occurred.');
-        }
-        return $message;
+        return Module::t(
+                'oauth2server',
+                $response->getParameter('error_description')
+            )
+            ?: Module::t(
+                'oauth2server',
+                'An internal server error occurred.'
+            );
     }
 }
