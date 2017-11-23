@@ -10,6 +10,11 @@ use tecnocen\oauth2server\exceptions\HttpException;
 class ErrorToExceptionFilter extends \yii\base\Behavior
 {
     /**
+     * @var string the unique id for the oauth2 module 
+     */
+    public $oauth2Module = 'oauth2';
+
+    /**
      * @inheritdoc
      */
     public function events()
@@ -24,7 +29,12 @@ class ErrorToExceptionFilter extends \yii\base\Behavior
      */
     public function afterAction($event)
     {
-        $response = $this->owner->module->getServer()->getResponse();
+        if (is_string($this->oauth2Module)) {
+            $this->oauth2Module = Yii::$app->getModule(
+                $this->oauth2Module
+            );
+        }
+        $response = $this->oauth2Module->getServer()->getResponse();
 
         if($response === null
             || $response->isInformational()

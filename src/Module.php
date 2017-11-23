@@ -106,12 +106,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
         'scope' => storage\Pdo::class,
     ];
 
-    public function beforeAction($action)
+    public function initOauth2Server()
     {
-        if (!parent::beforeAction($action)) {
-            return false;
-        }
-
         $this->modelMap = array_merge($this->defaultModelMap, $this->modelMap);
         $this->storageMap = array_merge($this->defaultStorageMap, $this->storageMap);
         foreach ($this->modelMap as $name => $definition) {
@@ -156,6 +152,17 @@ class Module extends \yii\base\Module implements BootstrapInterface
         ]));
         $this->set('request', Request::createFromGlobals());
         $this->set('response', new Response());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeAction($action)
+    {
+        if (!parent::beforeAction($action)) {
+            return false;
+        }
+        $this->initOauth2Server();
 
         return true;
     }
