@@ -16,6 +16,7 @@ class RestController extends \yii\rest\Controller
         return ArrayHelper::merge(parent::behaviors(), [
             'exceptionFilter' => [
                 'class' => ErrorToExceptionFilter::class,
+                'oauth2Module' => $this->module,
             ],
         ]);
     }
