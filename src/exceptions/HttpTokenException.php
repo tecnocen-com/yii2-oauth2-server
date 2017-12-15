@@ -2,7 +2,7 @@
 
 namespace tecnocen\oauth2server\exceptions;
 
-class HttpException extends \yii\web\HttpException
+class HttpTokenException extends \yii\web\HttpException
 {
     /**
      * @var string Uri for details of exception

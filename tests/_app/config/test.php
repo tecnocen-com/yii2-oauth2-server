@@ -19,6 +19,9 @@ return [
                 'user_credentials' => app\models\User::class,
             ],
             'grantTypes' => [
+                'client_credentials' => [
+                    'class' => OAuth2\GrantType\ClientCredentials::class,
+                ],
                 'user_credentials' => [
                     'class' => OAuth2\GrantType\UserCredentials::class,
                 ],
@@ -42,6 +45,9 @@ return [
         'request' => [
             'cookieValidationKey' => 'test',
             'enableCsrfValidation' => false,
+        ],
+        'errorHandler' => [
+            'class' => app\components\ErrorHandler::class,
         ],
     ],
     'params' => [],

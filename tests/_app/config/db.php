@@ -4,7 +4,7 @@ $db = [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=yii2_oauth2_server_test',
     'username' => 'root',
-    'password' => '',
+    'password' => '7h8j9k',
     'charset' => 'utf8',
 ];
 

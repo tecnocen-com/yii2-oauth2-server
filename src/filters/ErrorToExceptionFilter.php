@@ -5,7 +5,7 @@ namespace tecnocen\oauth2server\filters;
 use Yii;
 use yii\base\Controller;
 use tecnocen\oauth2server\Module;
-use tecnocen\oauth2server\exceptions\HttpException;
+use tecnocen\oauth2server\exceptions\HttpTokenException;
 
 class ErrorToExceptionFilter extends \yii\base\Behavior
 {
@@ -25,7 +25,7 @@ class ErrorToExceptionFilter extends \yii\base\Behavior
     /**
      * @param ActionEvent $event
      * @return boolean
-     * @throws HttpException when the request method is not allowed.
+     * @throws HttpTokenException when the request method is not allowed.
      */
     public function afterAction($event)
     {
@@ -44,9 +44,9 @@ class ErrorToExceptionFilter extends \yii\base\Behavior
             return;
         }
 
-        throw new HttpException(
+        throw new HttpTokenException(
             $response->getStatusCode(),
-            $this->getErrorMessage($response),
+            $response->getResponseBody(),
             $response->getParameter('error_uri')
         );
     }
