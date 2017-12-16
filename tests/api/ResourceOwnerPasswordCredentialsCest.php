@@ -3,6 +3,7 @@
 use app\fixtures\UserFixture;
 use Codeception\Util\HttpCode;
 use tecnocen\oauth2server\fixtures\OauthClientsFixture;
+use yii\helpers\Json;
 
 /**
  * @author Christopher CM <ccastaneira@tecnoce.com>
@@ -61,6 +62,13 @@ class ResourceOwnerPasswordCredentialsCest
             'error_description' => 'string',
             // 'error_uri' => 'string|null',
         ]);
+
+        $token = Json::decode($I->grabResponse());
+        $I->seeResponseContainsJson([
+            'error_description' => tecnocen\oauth2server\Module::t(
+                'oauth2server', $token['error_description']
+            )
+        ]);
     }
 
     /**
@@ -107,7 +115,7 @@ class ResourceOwnerPasswordCredentialsCest
             'refresh_token' => 'string:regex(/[0-9a-f]{40}/)',
         ]);
 
-        $token = yii\helpers\Json::decode($I->grabResponse());
+        $token = Json::decode($I->grabResponse());
         $I->sendGET('/site/index', [
             'access_token' => $token['access_token']
         ]);
