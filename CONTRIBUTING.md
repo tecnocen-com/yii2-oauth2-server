@@ -16,7 +16,13 @@ We are currently piggy backing from
 [Yii2 Extensions Forum](http://www.yiiframework.com/forum/index.php/forum/13-extensions/)
 you can make questions there where other Yii2 devs might see it and answer it.
  
-If you need profesional support contact **TODO**
+If you need profesional support please feel free to contact support@tecnocen.com with the following information.
+
+- What steps will reproduce the problem?
+- What is the expected result?
+- What do you get instead?
+- Additional info
+
 
 Reporting Bugs
 --------------
