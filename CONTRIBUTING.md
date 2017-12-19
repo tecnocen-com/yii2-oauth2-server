@@ -1,4 +1,4 @@
-Contributing to Tecnocen Yii2 Workflow
+Contributing to Tecnocen Yii2 Oauth2 Server
 ======================================
 
 :+1::tada: First off, thanks for taking the time to contribute! :tada::+1:
