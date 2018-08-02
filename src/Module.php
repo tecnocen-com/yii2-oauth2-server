@@ -48,6 +48,12 @@ class Module extends \yii\base\Module implements BootstrapInterface
                 'route' => $this->getUniqueId() . '/rest/<action>',
                 'verb' => ['POST'],
             ],
+            [
+                'class' => UrlRule::class,
+                'pattern' => $this->getUniqueId() . '/<action:\w+>',
+                'route' => $this->getUniqueId() . '/rest/options',
+                'verb' => ['OPTIONS'],
+            ],
         ];
     }
 

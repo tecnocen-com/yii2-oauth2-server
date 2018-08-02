@@ -2,9 +2,10 @@
 
 namespace tecnocen\oauth2server\controllers;
 
+use tecnocen\oauth2server\filters\ErrorToExceptionFilter;
 use Yii;
 use yii\helpers\ArrayHelper;
-use tecnocen\oauth2server\filters\ErrorToExceptionFilter;
+use yii\rest\OptionsAction;
 
 class RestController extends \yii\rest\Controller
 {
@@ -19,6 +20,20 @@ class RestController extends \yii\rest\Controller
                 'oauth2Module' => $this->module,
             ],
         ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function actions()
+    {
+        return [
+            'options' => [
+                'class' => Options::class,
+                'collectionOptions' => ['POST', 'OPTIONS'],
+                'resourceOptions' => ['OPTIONS'],
+            ],
+        ];
     }
 
     /**
