@@ -7,6 +7,9 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\rest\OptionsAction;
 
+/**
+ * @property tecnocen\oauth2server\Module $module
+ */
 class RestController extends \yii\rest\Controller
 {
     /**
@@ -20,6 +23,17 @@ class RestController extends \yii\rest\Controller
                 'oauth2Module' => $this->module,
             ],
         ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function verbs()
+    {
+        return [
+            'token' => ['POST'],
+            'options' => ['OPTIONS'],
+        ];
     }
 
     /**
