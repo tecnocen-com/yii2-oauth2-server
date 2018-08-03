@@ -31,10 +31,10 @@
     "require": {
         "php": ">=5.6",
         "bshaffer/oauth2-server-php": "~1.3",
-        "tecnocen/yii2-migrate": "*",
         "yiisoft/yii2": "~2.0.12"
     },
     "require-dev": {
+        "tecnocen/yii2-migrate": "*",
         "codeception/base": "^2.2.11",
         "codeception/verify": "~0.3.1"
     },
