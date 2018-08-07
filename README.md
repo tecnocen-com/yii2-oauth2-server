@@ -153,9 +153,6 @@ class Controller extends \yii\rest\Controller
                     ['class' => QueryParamAuth::class, 'tokenParam' => 'accessToken'],
                 ]
             ],
-            'exceptionFilter' => [
-                'class' => ErrorToExceptionFilter::class
-            ],
         ]);
     }
 }
