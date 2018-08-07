@@ -7,6 +7,9 @@ use yii\base\Controller;
 use tecnocen\oauth2server\Module;
 use tecnocen\oauth2server\exceptions\HttpTokenException;
 
+/**
+ * @deprecated functionality included on auth\CompositeAuth
+ */
 class ErrorToExceptionFilter extends \yii\base\Behavior
 {
     /**
