@@ -31,4 +31,45 @@ class CompositeAuth extends \yii\filters\auth\CompositeAuth
 
         return false;
     }
+    
+    
+
+    /**
+     * @inheritdoc
+     */
+    public function afterAction($event, $result)
+    {
+        $response = $this->oauth2Module->getServer()->getResponse();
+
+        if($response === null
+            || $response->isInformational()
+            || $response->isSuccessful()
+            || $response->isRedirection()
+        ) {
+            return;
+        }
+
+        throw new HttpException(
+            $response->getStatusCode(),
+            $this->getErrorMessage($response),
+            $response->getParameter('error_uri')
+        );
+
+        return $result;
+    }
+
+    /**
+     * @return string the error message shown on the response.
+     */
+    protected function getErrorMessage(\OAuth2\Response $response)
+    {
+        return Module::t(
+                'oauth2server',
+                $response->getParameter('error_description')
+            )
+            ?: Module::t(
+                'oauth2server',
+                'An internal server error occurred.'
+            );
+    }
 }
