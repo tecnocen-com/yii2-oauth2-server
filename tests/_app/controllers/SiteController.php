@@ -2,17 +2,16 @@
 
 namespace app\controllers;
 
-use yii\web\Controller;
+use tecnocen\oauth2server\filters\auth\CompositeAuth;
+use yii\rest\Controller;
 
 class SiteController extends Controller
 {
     public function behaviors()
     {
-        return [
-            [
-                'class' => \tecnocen\oauth2server\filters\auth\CompositeAuth::class,
-            ],
-        ];
+        return array_merge(parent::behaviors(), [
+            'authenticator' => CompositeAuth::class,
+        ]);
     }
 
     public function actions()
@@ -26,6 +25,6 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        return \Yii::$app->user->identity;
     }
 }

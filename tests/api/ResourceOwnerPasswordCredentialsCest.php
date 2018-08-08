@@ -1,6 +1,7 @@
 <?php
 
 use app\fixtures\UserFixture;
+use app\fixtures\OauthScopesFixture;
 use Codeception\Util\HttpCode;
 use tecnocen\oauth2server\fixtures\OauthClientsFixture;
 use yii\helpers\Json;
@@ -14,6 +15,7 @@ class ResourceOwnerPasswordCredentialsCest
     {
         $I->haveFixtures([
             'user' => UserFixture::class,
+            'scopes' => OauthScopesFixture::class,
             'clients' => OauthClientsFixture::class,
         ]);
     }
@@ -117,7 +119,7 @@ class ResourceOwnerPasswordCredentialsCest
 
         $token = Json::decode($I->grabResponse());
         $I->sendGET('/site/index', [
-            'access_token' => $token['access_token']
+            'accessToken' => $token['access_token']
         ]);
 
          $I->seeResponseCodeIs(HttpCode::OK);
@@ -131,15 +133,14 @@ class ResourceOwnerPasswordCredentialsCest
         $I->wantTo('Request a resource controller with invalid token.');
 
         $I->sendGET('/site/index', [
-            'access_token' => md5('InvalidToken'),
+            'accessToken' => md5('InvalidToken'),
         ]);
 
         $I->seeResponseCodeIs(HttpCode::UNAUTHORIZED);
         $I->seeResponseIsJson();
-        $I->seeResponseMatchesJsonType([
-            'error' => 'string',
-            'error_description' => 'string',
-            // 'error_uri' => 'string|null',
+        $I->seeResponseContainsJson([
+            'name' => 'Unauthorized',
+            'message' => 'Your request was made with invalid credentials.',
         ]);
     }
 }
