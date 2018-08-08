@@ -108,11 +108,17 @@ class Module extends \yii\base\Module implements BootstrapInterface
                 'route' => $this->getUniqueId() . '/rest/<action>',
                 'verb' => ['POST'],
             ],
+            [
+                'class' => UrlRule::class,
+                'pattern' => $this->getUniqueId() . '/<action:\w+>',
+                'route' => $this->getUniqueId() . '/rest/options',
+                'verb' => ['OPTIONS'],
+            ],
         ];
     }
 
     /**
-     * Initializes the OAuth2 Server to handle requests like token creation.
+     * Initializes the oauth2 server and its dependencies.
      */
     public function initOauth2Server()
     {
