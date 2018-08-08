@@ -11,6 +11,8 @@ use yii\helpers\Json;
  */
 class ResourceOwnerPasswordCredentialsCest
 {
+    static $token;
+
     public function fixtures(ApiTester $I)
     {
         $I->haveFixtures([
@@ -40,6 +42,8 @@ class ResourceOwnerPasswordCredentialsCest
             'access_token' => 'string:regex(/[0-9a-f]{40}/)',
             'refresh_token' => 'string:regex(/[0-9a-f]{40}/)',
         ]);
+
+        self::$token = $I->grabDataFromResponseByJsonPath('$.access_token')[0];
     }
 
     /**
@@ -97,29 +101,13 @@ class ResourceOwnerPasswordCredentialsCest
     }
 
     /**
-     * @depends fixtures
+     * @depends accessTokenRequest
      */
     public function requestToResource(ApiTester $I)
     {
         $I->wantTo('Request a resource controller.');
-        $I->amHttpAuthenticated('testclient', 'testpass');
-
-        $I->sendPOST('/oauth2/token', [
-            'grant_type' => 'password',
-            'username' => 'erau',
-            'password' => 'password_0',
-        ]);
-
-        $I->seeResponseCodeIs(HttpCode::OK);
-        $I->seeResponseIsJson();
-        $I->seeResponseMatchesJsonType([
-            'access_token' => 'string:regex(/[0-9a-f]{40}/)',
-            'refresh_token' => 'string:regex(/[0-9a-f]{40}/)',
-        ]);
-
-        $token = Json::decode($I->grabResponse());
         $I->sendGET('/site/index', [
-            'accessToken' => $token['access_token']
+            'accessToken' => self::$token,
         ]);
 
          $I->seeResponseCodeIs(HttpCode::OK);
