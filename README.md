@@ -128,14 +128,12 @@ test user credentials ```testclient:testpass``` for ```http://fake/```
 
 ### Controllers
 
-To support authentication by access token. Simply add the behaviors for your
-base controller 
+To support authentication by access token. Simply add the behaviors for your controller or module.
 
 ```php
 use yii\helpers\ArrayHelper;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
-use tecnocen\oauth2server\filters\ErrorToExceptionFilter;
 use tecnocen\oauth2server\filters\auth\CompositeAuth;
 
 class Controller extends \yii\rest\Controller
@@ -150,9 +148,33 @@ class Controller extends \yii\rest\Controller
                 'class' => CompositeAuth::class,
                 'authMethods' => [
                     ['class' => HttpBearerAuth::class],
-                    ['class' => QueryParamAuth::class, 'tokenParam' => 'accessToken'],
+                    [
+                        'class' => QueryParamAuth::class,
+                        'tokenParam' => 'accessToken',
+                    ],
                 ]
             ],
+        ]);
+    }
+}
+```
+
+The code above is the same as the default implementation which can be
+simplified as
+
+```php
+use yii\helpers\ArrayHelper;
+use tecnocen\oauth2server\filters\auth\CompositeAuth;
+
+class Controller extends \yii\rest\Controller
+{
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return ArrayHelper::merge(parent::behaviors(), [
+            'authenticator' => CompositeAuth::class,
         ]);
     }
 }
