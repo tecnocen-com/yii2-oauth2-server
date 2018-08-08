@@ -37,19 +37,9 @@ use yii\web\UrlRule;
 class Module extends \yii\base\Module implements BootstrapInterface
 {
     /**
-     * @inheritdoc
+     * @var bool whether the oauth2 server was initialized
      */
-    public function urlRules()
-    {
-        return [
-            [
-                'class' => UrlRule::class,
-                'pattern' => $this->getUniqueId() . '/<action:\w+>',
-                'route' => $this->getUniqueId() . '/rest/<action>',
-                'verb' => ['POST'],
-            ],
-        ];
-    }
+    private $serverInitialized = false;
 
     /**
      * @inheritdoc
@@ -106,8 +96,31 @@ class Module extends \yii\base\Module implements BootstrapInterface
         'scope' => storage\Pdo::class,
     ];
 
+    /**
+     * @inheritdoc
+     */
+    public function urlRules()
+    {
+        return [
+            [
+                'class' => UrlRule::class,
+                'pattern' => $this->getUniqueId() . '/<action:\w+>',
+                'route' => $this->getUniqueId() . '/rest/<action>',
+                'verb' => ['POST'],
+            ],
+        ];
+    }
+
+    /**
+     * Initializes the OAuth2 Server to handle requests like token creation.
+     */
     public function initOauth2Server()
     {
+        if ($this->serverInitialized) {
+            return;
+        }
+
+        $this->serverInitialized = true;
         $this->modelMap = array_merge($this->defaultModelMap, $this->modelMap);
         $this->storageMap = array_merge($this->defaultStorageMap, $this->storageMap);
         foreach ($this->modelMap as $name => $definition) {

@@ -2,74 +2,40 @@
 
 namespace tecnocen\oauth2server\filters\auth;
 
+use tecnocen\oauth2server\filters\ErrorToExceptionTrait;
 use Yii;
+use yii\filters\auth\HttpBearerAuth;
+use yii\filters\auth\QueryParamAuth;
+use yii\web\HttpException;
 
 class CompositeAuth extends \yii\filters\auth\CompositeAuth
 {
+    use ErrorToExceptionTrait {
+        ErrorToExceptionTrait::beforeAction as traitBeforeAction;
+    }
+
     /**
-     * @var string the unique id for the oauth2 module 
+     * @inheritdoc
      */
-    public $oauth2Module = 'oauth2';
+    public $authMethods = [
+        ['class' => HttpBearerAuth::class],
+        [
+            'class' => QueryParamAuth::class,
+            'tokenParam' => 'accessToken',
+        ],
+    ];
 
     /**
      * @inheritdoc
      */
     public function beforeAction($action)
     {
-        
-        if (parent::beforeAction($action)) {
-            if (is_string($this->oauth2Module)) {
-                $this->oauth2Module = Yii::$app->getModule(
-                    $this->oauth2Module
-                );
-            }
-            $this->oauth2Module->initOauth2Server();
+        if ($this->traitBeforeAction($action)) {
             $this->oauth2Module->getServer()->verifyResourceRequest();
 
             return true;
         }
 
         return false;
-    }
-    
-    
-
-    /**
-     * @inheritdoc
-     */
-    public function afterAction($event, $result)
-    {
-        $response = $this->oauth2Module->getServer()->getResponse();
-
-        if($response === null
-            || $response->isInformational()
-            || $response->isSuccessful()
-            || $response->isRedirection()
-        ) {
-            return;
-        }
-
-        throw new HttpException(
-            $response->getStatusCode(),
-            $this->getErrorMessage($response),
-            $response->getParameter('error_uri')
-        );
-
-        return $result;
-    }
-
-    /**
-     * @return string the error message shown on the response.
-     */
-    protected function getErrorMessage(\OAuth2\Response $response)
-    {
-        return Module::t(
-                'oauth2server',
-                $response->getParameter('error_description')
-            )
-            ?: Module::t(
-                'oauth2server',
-                'An internal server error occurred.'
-            );
     }
 }
