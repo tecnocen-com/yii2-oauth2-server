@@ -180,6 +180,28 @@ class Controller extends \yii\rest\Controller
 }
 ```
 
+### Scopes
+
+The property `tecnocen\oauth2server\filters\auth\CompositeAuth::$actionScopes`
+set which actions require specific scopes. If those scopes are not meet the
+action wont be executed, and the server will reply with an HTTP Status Code 403.
+
+```php
+public function behaviors()
+{
+    return ArrayHelper::merge(parent::behaviors(), [
+        'authenticator' => [
+            'class' => CompositeAuth::class,
+            'actionScopes' => [
+                'create' => 'default create',
+                'update' => 'default edit',
+                '*' => 'default', // wildcards are allowed
+            ]
+        ],,
+    ]);
+}
+```
+
 ### Generate Token with JS
 
 To get access token (js example):

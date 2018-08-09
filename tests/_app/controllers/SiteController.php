@@ -10,7 +10,10 @@ class SiteController extends Controller
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
-            'authenticator' => CompositeAuth::class,
+            'authenticator' => [
+                'class' => CompositeAuth::class,
+                'actionScopes' => ['user' => 'user'],
+            ],
         ]);
     }
 
@@ -24,6 +27,11 @@ class SiteController extends Controller
     }
 
     public function actionIndex()
+    {
+        return \Yii::$app->user->identity;
+    }
+
+    public function actionUser()
     {
         return \Yii::$app->user->identity;
     }

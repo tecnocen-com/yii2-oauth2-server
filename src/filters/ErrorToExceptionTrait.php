@@ -42,19 +42,20 @@ trait ErrorToExceptionTrait
      */
     public function afterAction($event, $result)
     {
-        if (is_string($this->oauth2Module)) {
-            $this->oauth2Module = Yii::$app->getModule(
-                $this->oauth2Module
-            );
-        }
-        $response = $this->oauth2Module->getServer()->getResponse();
+        $this->ensureSuccessResponse();
 
+        return $result;
+    }
+
+    protected function ensureSuccessResponse()
+    {
+        $response = $this->oauth2Module->getResponse();
         if($response === null
             || $response->isInformational()
             || $response->isSuccessful()
             || $response->isRedirection()
         ) {
-            return $result;
+            return;
         }
 
         throw new HttpTokenException(

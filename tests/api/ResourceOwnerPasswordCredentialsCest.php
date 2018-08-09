@@ -12,6 +12,7 @@ use yii\helpers\Json;
 class ResourceOwnerPasswordCredentialsCest
 {
     static $token;
+    static $scopeToken;
 
     public function fixtures(ApiTester $I)
     {
@@ -68,13 +69,6 @@ class ResourceOwnerPasswordCredentialsCest
             'error_description' => 'string',
             // 'error_uri' => 'string|null',
         ]);
-
-        $token = Json::decode($I->grabResponse());
-        $I->seeResponseContainsJson([
-            'error_description' => tecnocen\oauth2server\Module::t(
-                'oauth2server', $token['error_description']
-            )
-        ]);
     }
 
     /**
@@ -98,16 +92,46 @@ class ResourceOwnerPasswordCredentialsCest
             'access_token' => 'string:regex(/[0-9a-f]{40}/)',
             'refresh_token' => 'string:regex(/[0-9a-f]{40}/)',
         ]);
+
+        self::$scopeToken = $I->grabDataFromResponseByJsonPath(
+            '$.access_token'
+        )[0];
     }
 
     /**
      * @depends accessTokenRequest
+     * @depends accessTokenRequestWithScopes
      */
     public function requestToResource(ApiTester $I)
     {
         $I->wantTo('Request a resource controller.');
         $I->sendGET('/site/index', [
             'accessToken' => self::$token,
+        ]);
+
+         $I->seeResponseCodeIs(HttpCode::OK);
+    }
+
+    /**
+     * @depends accessTokenRequest
+     */
+    public function failedScopedRequest(ApiTester $I)
+    {
+        $I->wantTo('Fail on a resource controller with scope.');
+        $I->sendGET('/site/user', [
+            'accessToken' => self::$token,
+        ]);
+
+        $I->seeResponseCodeIs(HttpCode::FORBIDDEN);
+    }
+    /**
+     * @depends accessTokenRequest
+     */
+    public function successScopedRequest(ApiTester $I)
+    {
+        $I->wantTo('Success on a resource controller with scope.');
+        $I->sendGET('/site/user', [
+            'accessToken' => self::$scopeToken,
         ]);
 
          $I->seeResponseCodeIs(HttpCode::OK);
@@ -121,7 +145,7 @@ class ResourceOwnerPasswordCredentialsCest
         $I->wantTo('Request a resource controller with invalid token.');
 
         $I->sendGET('/site/index', [
-            'accessToken' => md5('InvalidToken'),
+            'accessToken' => 'InvalidToken',
         ]);
 
         $I->seeResponseCodeIs(HttpCode::UNAUTHORIZED);
