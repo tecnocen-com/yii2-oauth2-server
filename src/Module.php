@@ -48,6 +48,12 @@ class Module extends \yii\base\Module implements BootstrapInterface
                 'route' => $this->getUniqueId() . '/rest/<action>',
                 'verb' => ['POST'],
             ],
+            [
+                'class' => UrlRule::class,
+                'pattern' => $this->getUniqueId() . '/<action:\w+>',
+                'route' => $this->getUniqueId() . '/rest/options',
+                'verb' => ['OPTIONS'],
+            ],
         ];
     }
 
@@ -106,6 +112,9 @@ class Module extends \yii\base\Module implements BootstrapInterface
         'scope' => storage\Pdo::class,
     ];
 
+    /**
+     * Initializes the oauth2 server and its dependencies.
+     */
     public function initOauth2Server()
     {
         $this->modelMap = array_merge($this->defaultModelMap, $this->modelMap);
