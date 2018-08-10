@@ -7,8 +7,9 @@
 
 namespace app\components;
 
-use Yii;
 use tecnocen\oauth2server\exceptions\HttpTokenException;
+use Yii;
+use yii\helpers\Json;
 
 /**
  * ErrorHandler handles uncaught PHP errors and exceptions.
@@ -34,7 +35,7 @@ class ErrorHandler extends \yii\web\ErrorHandler
     protected function convertExceptionToArray($exception)
     {
         if ($exception instanceof HttpTokenException) {
-            return yii\helpers\Json::decode($exception->getMessage());
+            return Json::decode($exception->getMessage());
         }
 
         return parent::convertExceptionToArray($exception);

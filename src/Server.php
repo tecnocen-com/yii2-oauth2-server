@@ -61,7 +61,7 @@ class Server extends \OAuth2\Server
     ) {
         parent::verifyResourceRequest(
             $request ?: $this->module->getRequest(),
-            $response,
+            $response ?: $this->module->getResponse(),
             $scope
         );
     }
@@ -75,7 +75,7 @@ class Server extends \OAuth2\Server
     ) {
         return parent::handleTokenRequest(
             $request ?: $this->module->getRequest(),
-            $response
+            $response ?: $this->module->getResponse()
         );
     }
 }

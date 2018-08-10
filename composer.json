@@ -34,9 +34,13 @@
         "yiisoft/yii2": "~2.0.12"
     },
     "require-dev": {
+        "ext-curl": "*",
+        "codeception/base": "^2.2.1",
+        "codeception/verify": "~0.3.1|~1.0.0",
+        "flow/jsonpath": "~0.3",
+        "phpunit/php-code-coverage": "5.3.*",
         "tecnocen/yii2-migrate": "*",
-        "codeception/base": "^2.2.11",
-        "codeception/verify": "~0.3.1"
+        "yiisoft/yii2-debug": "*"
     },
     "scripts": {
         "deploy-tests": [

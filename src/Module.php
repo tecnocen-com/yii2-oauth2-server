@@ -37,25 +37,9 @@ use yii\web\UrlRule;
 class Module extends \yii\base\Module implements BootstrapInterface
 {
     /**
-     * @inheritdoc
+     * @var bool whether the oauth2 server was initialized
      */
-    public function urlRules()
-    {
-        return [
-            [
-                'class' => UrlRule::class,
-                'pattern' => $this->getUniqueId() . '/<action:\w+>',
-                'route' => $this->getUniqueId() . '/rest/<action>',
-                'verb' => ['POST'],
-            ],
-            [
-                'class' => UrlRule::class,
-                'pattern' => $this->getUniqueId() . '/<action:\w+>',
-                'route' => $this->getUniqueId() . '/rest/options',
-                'verb' => ['OPTIONS'],
-            ],
-        ];
-    }
+    private $serverInitialized = false;
 
     /**
      * @inheritdoc
@@ -113,10 +97,36 @@ class Module extends \yii\base\Module implements BootstrapInterface
     ];
 
     /**
+     * @inheritdoc
+     */
+    public function urlRules()
+    {
+        return [
+            [
+                'class' => UrlRule::class,
+                'pattern' => $this->getUniqueId() . '/<action:\w+>',
+                'route' => $this->getUniqueId() . '/rest/<action>',
+                'verb' => ['POST'],
+            ],
+            [
+                'class' => UrlRule::class,
+                'pattern' => $this->getUniqueId() . '/<action:\w+>',
+                'route' => $this->getUniqueId() . '/rest/options',
+                'verb' => ['OPTIONS'],
+            ],
+        ];
+    }
+
+    /**
      * Initializes the oauth2 server and its dependencies.
      */
     public function initOauth2Server()
     {
+        if ($this->serverInitialized) {
+            return;
+        }
+
+        $this->serverInitialized = true;
         $this->modelMap = array_merge($this->defaultModelMap, $this->modelMap);
         $this->storageMap = array_merge($this->defaultStorageMap, $this->storageMap);
         foreach ($this->modelMap as $name => $definition) {
