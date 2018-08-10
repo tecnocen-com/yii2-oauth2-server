@@ -11,8 +11,8 @@ use yii\helpers\Json;
  */
 class ResourceOwnerPasswordCredentialsCest
 {
-    static $token;
-    static $scopeToken;
+    public static $token;
+    public static $scopeToken;
 
     public function fixtures(ApiTester $I)
     {
