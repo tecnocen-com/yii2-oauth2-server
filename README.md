@@ -4,6 +4,14 @@ yii2-oauth2-server
 A wrapper for implementing an
 [OAuth2 Server](https://github.com/bshaffer/oauth2-server-php).
 
+[![Latest Stable Version](https://poser.pugx.org/tecnocen/yii2-oauth2-server/v/stable)](https://packagist.org/packages/tecnocen/yii2-oauth2-server)
+[![Total Downloads](https://poser.pugx.org/tecnocen/yii2-oauth2-server/downloads)](https://packagist.org/packages/tecnocen/yii2-oauth2-server)
+[![Code Coverage](https://scrutinizer-ci.com/g/tecnocen-com/yii2-oauth2-server/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/tecnocen-com/yii2-oauth2-server/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/tecnocen-com/yii2-oauth2-server/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/tecnocen-com/yii2-oauth2-server/?branch=master)
+
+Scrutinizer [![Build Status Scrutinizer](https://scrutinizer-ci.com/g/tecnocen-com/yii2-oauth2-server/badges/build.png?b=master&style=flat)](https://scrutinizer-ci.com/g/tecnocen-com/yii2-oauth2-server/build-status/master)
+Travis [![Build Status Travis](https://travis-ci.org/tecnocen-com/yii2-oauth2-server.svg?branch=master&style=flat?style=for-the-badge)](https://travis-ci.org/tecnocen-com/yii2-oauth2-server)
+
 This project was forked from
 [Filsh Original Project](https://github.com/Filsh/yii2-oauth2-server) but the
 changes are not transparent, read [UPGRADE.md] to pass to the latest version.
@@ -219,13 +227,41 @@ var data = {
 //
 ```
 
+## Built With
+
+* Yii 2: The Fast, Secure and Professional PHP Framework [http://www.yiiframework.com](http://www.yiiframework.com)
+
+## Code of Conduct
+
+Please read [CODE_OF_CONDUCT.md](https://github.com/tecnocen-com/yii2-oauth2-server/blob/master/CODE_OF_CONDUCT.md) for details on our code of conduct.
+
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://github.com/tecnocen-com/yii2-oauth2-server/blob/master/CONTRIBUTING.md) for details on the process for submitting pull requests to us.
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/tecnocen-com/yii2-oauth2-server/tags).
+
+_Considering [SemVer](http://semver.org/) for versioning rules 9, 10 and 11 talk about pre-releases, they will not be used within the Tecnocen-com._
+
+## Authors
+
+* [**Angel Guevara**](https://github.com/Faryshta) - *Initial work* - [Tecnocen.com](https://github.com/Tecnocen-com)
+* [**Carlos Llamosas**](https://github.com/neverabe) - *Initial work* - [Tecnocen.com](https://github.com/Tecnocen-com)
+
+See also the list of [contributors](https://github.com/tecnocen-com/yii2-oauth2-server/graphs/contributors) who participated in this project.
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
+## Acknowledgments
+
+* TO DO - Hat tip to anyone who's code was used
+* TO DO - Inspiration
+* TO DO - etc
+
+[![yii2-oauth2-server](https://img.shields.io/badge/Powered__by-Tecnocen.com-orange.svg?style=for-the-badge)](https://www.tecnocen.com/)
 
 For more, see https://github.com/bshaffer/oauth2-server-php
