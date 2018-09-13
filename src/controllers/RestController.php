@@ -43,7 +43,7 @@ class RestController extends \yii\rest\Controller
     {
         return [
             'options' => [
-                'class' => Options::class,
+                'class' => OptionsAction::class,
                 'collectionOptions' => ['POST', 'OPTIONS'],
                 'resourceOptions' => ['OPTIONS'],
             ],
