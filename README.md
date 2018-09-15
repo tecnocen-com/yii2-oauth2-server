@@ -202,6 +202,34 @@ public function behaviors()
 }
 ```
 
+### Automatically Revoke Tokens
+
+Sometimes its neccessary to revoke a token on each request to prevent the
+request from being triggered twice.
+
+Attaching the action filter `tecnocen\oauth2server\filters\RevokeAccessToken`
+allows to configure the actions to automatically revoke the access token.
+
+```php
+public function behaviors()
+{
+    return [
+        'revokeToken' => [
+            'class' => \tecnocen\oauth2server\filters\RevokeAccessToken::class,
+            // optional only revoke the token if it has any of the following
+            // scopes. if not defined it will always revoke the token.
+            'scopes' => ['author', 'seller'],
+            // optional whether or not revoke all tokens or just the active one
+            'revokeAll' => true,
+            // optional if non authenticated users are permited.
+            'allowGuests' => true,
+            // which actions this behavior applies to.
+            'only' => ['create', 'update'],
+        ]
+    ];
+}
+```
+
 ### Generate Token with JS
 
 To get access token (js example):
