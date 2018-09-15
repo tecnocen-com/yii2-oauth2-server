@@ -43,6 +43,7 @@
         "yiisoft/yii2-debug": "*"
     },
     "scripts": {
+        "yii": "@php tests/_app/yii.php",
         "deploy-tests": [
             "@composer update --prefer-stable",
             "@php tests/_app/yii.php migrate -p=@tecnocen/oauth2server/migrations/tables --interactive=0",
@@ -54,6 +55,12 @@
         "run-coverage": [
             "@php vendor/bin/codecept run --steps api --coverage --coverage-xml --coverage-html"
         ]
+    },
+    "scripts-descriptions": {
+        "yii": "shortcut for `php tests/_app/yii.php`",
+        "deploy-tests": "Deploy the testing application",
+        "run-tests": "shortcut for `codecept run --steps`",
+        "run-coverage": "shortcut for `run-tests -- --coverage --coverage-xml"
     },
     "autoload": {
         "psr-4": {
