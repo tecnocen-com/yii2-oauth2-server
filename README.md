@@ -207,6 +207,26 @@ public function behaviors()
 Sometimes its neccessary to revoke a token on each request to prevent the
 request from being triggered twice.
 
+To enable this functionality you need to implement
+`tecnocen\oauth2server\RevokeAccessTokenInterface` in the class used to identify
+the authenticated user.
+
+```php
+use OAuth2\Storage\UserCredentialsInterface;
+use tecnocen\oauth2server\RevokeAccessTokenInterface;
+use tecnocen\oauth2server\RevokeAccessTokenTrait;
+
+class User extend \yii\db\ActiveRecord implement
+    UserCredentialsInterface,
+    RevokeAccessTokenInterface
+{
+    use tecnocen\oauth2server\RevokeAccessTokenTrait; // optional, trait with default implementation.
+    
+    // rest of the class.
+}
+```
+Then use the previous class as configuration for `Yii::$app->user->identityClass`
+
 Attaching the action filter `tecnocen\oauth2server\filters\RevokeAccessToken`
 allows to configure the actions to automatically revoke the access token.
 
