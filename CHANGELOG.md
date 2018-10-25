@@ -1,6 +1,19 @@
 Yii2 OAuth2 Server Library
 ==========================
 
+4.1.0
+-----
+
+- [Enh] Functionality to revoke a token after it gets used by
+  `tecnocen\oauth2server\filters\RevokeAccessToken` and
+  `tecnocen\oauth2server\RevokeAccessTokenInterface`
+
+4.0.1
+-----
+
+- [Bug] Add action for OPTIONS verb on
+  `tecnocen\oauth2server\controllers\RestController` (Faryshta)
+
 
 4.0.0
 -----

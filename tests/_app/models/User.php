@@ -3,14 +3,18 @@
 namespace app\models;
 
 use OAuth2\Storage\UserCredentialsInterface;
-use tecnocen\oauth2server\models\OauthAccessTokens as AccessToken;
+use tecnocen\oauth2server\RevokeAccessTokenInterface;
+use tecnocen\oauth2server\RevokeAccessTokenTrait;
 use Yii;
 use yii\web\IdentityInterface;
 
 class User extends \yii\db\ActiveRecord implements
     UserCredentialsInterface,
-    IdentityInterface
+    IdentityInterface,
+    RevokeAccessTokenInterface
 {
+    use RevokeAccessTokenTrait;
+
     public static function tableName()
     {
         return '{{%user}}';
@@ -22,16 +26,6 @@ class User extends \yii\db\ActiveRecord implements
     public static function findIdentity($id)
     {
         return static::findOne(['id' => $id]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-        return static::find()->joinWith('accessTokens', false)
-            ->andWhere(['access_token' => $token])
-            ->one();
     }
 
     /**
@@ -173,15 +167,6 @@ class User extends \yii\db\ActiveRecord implements
             : $this;
 
         return ['user_id' => $user->id];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAccessTokens()
-    {
-        return $this->hasMany(AccessToken::class, ['user_id' => 'id'])
-            ->andOnCondition(['client_id' => 'testclient']);
     }
 
     /**
