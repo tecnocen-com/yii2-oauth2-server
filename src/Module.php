@@ -239,6 +239,9 @@ class Module extends \yii\base\Module implements BootstrapInterface
             $app->get('i18n')->translations['tecnocen/oauth2/*'] = [
                 'class'    => PhpMessageSource::class,
                 'basePath' => __DIR__ . '/messages',
+                'fileMap' => [
+                    'tecnocen/oauth2/oauth2server' => 'oauth2server.php',
+                ],
             ];
         }
     }

@@ -41,7 +41,7 @@ return yii\helpers\ArrayHelper::merge(
                 'enableCsrfValidation' => false,
             ],
             'errorHandler' => [
-                'class' => app\components\ErrorHandler::class,
+                'class' => yii\web\ErrorHandler::class,
             ],
         ],
         'params' => [],
