@@ -60,7 +60,7 @@ trait ErrorToExceptionTrait
 
         throw new HttpTokenException(
             $response->getStatusCode(),
-            $response->getResponseBody(),
+            $this->getErrorMessage($response),
             $response->getParameter('error_uri')
         );
     }
@@ -73,7 +73,7 @@ trait ErrorToExceptionTrait
             )
             ?: Module::t(
                 'oauth2server',
-                'An internal server error occurred.'
+                'An internal server error occurred'
             );
     }
 }

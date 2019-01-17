@@ -1,6 +1,12 @@
 Yii2 OAuth2 Server Library
 ==========================
 
+4.1.1
+-----
+
+- [Bug] Fixed support for I18N and added 'es-MX' translation.
+  (Faryshta)
+
 4.1.0
 -----
 
