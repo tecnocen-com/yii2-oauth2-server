@@ -65,9 +65,8 @@ class ResourceOwnerPasswordCredentialsCest
         $I->seeResponseIsJson();
 
         $I->seeResponseMatchesJsonType([
-            'error' => 'string',
-            'error_description' => 'string',
-            // 'error_uri' => 'string|null',
+            'name' => 'string',
+            'message' => 'string',
         ]);
     }
 
