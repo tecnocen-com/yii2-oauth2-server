@@ -4,7 +4,6 @@ return yii\helpers\ArrayHelper::merge(
     require __DIR__ . '/test.php',
     [
         'id' => 'yii2-oauth2-demo',
-        'language' => 'es-MX', // WONT BE MERGED
         'bootstrap' => ['debug'],
         'aliases' => [
             '@vendor' => VENDOR_DIR,

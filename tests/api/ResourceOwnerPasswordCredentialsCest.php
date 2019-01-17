@@ -139,6 +139,7 @@ class ResourceOwnerPasswordCredentialsCest
 
     /**
      * @depends fixtures
+     * @depends SingleUseTokenCest:singleUseRequest
      */
     public function requestToResourceIvalid(ApiTester $I)
     {
