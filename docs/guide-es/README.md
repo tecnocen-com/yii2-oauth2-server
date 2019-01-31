@@ -4,15 +4,15 @@ Yii2 OAuth2 Server
 Una envoltura para implementar
 [OAuth2 Server](https://github.com/bshaffer/oauth2-server-php).
 
-Este proyecto fue bifurkado de
+Este proyecto fue bifurcado de
 [Proyecto Original de Filsh](https://github.com/Filsh/yii2-oauth2-server)
 sin embargo los cambios no son transparentes, se recomienda leer
-[Guia de Actualizacion](UPGRADE.md) para usar la version mas reciente.
+[Guia de Actualizacion](UPGRADE.md) para usar la versión mas reciente.
 
-Instalacion
+Instalación
 -----------
 
-La manera prefferida de instalar esta extension es mediante [composer](http://getcomposer.org/download/).
+La manera preferida de instalar esta extensión es mediante [composer](http://getcomposer.org/download/).
 
 Ya sea corriendo
 
@@ -27,13 +27,13 @@ o agregando
 "tecnocen/yii2-oauth2-server": "~4.1"
 ```
 
-a la seccion `require` de tu archivo `composer.json`.
+a la sección `require` de tu archivo `composer.json`.
 
 Uso
 ---
 
-Para usar esta extension simplemente agrega el siguiente codigo en tu
-configuracion de aplicacion como un nuevo modulo
+Para usar esta extensión simplemente agrega el siguiente código en tu
+configuración de aplicación como un nuevo módulo
 
 ```php
     'bootstrap' => ['oauth2'],
@@ -59,12 +59,12 @@ configuracion de aplicacion como un nuevo modulo
     ],
 ```
 
-El modulo sera automaticamente inicializado con las traducciones y agregara
+El módulo será automáticamente inicializado con las traducciones y agregará
 las reglas de url necesarias a `Yii::$app->urlManager`.
 
 ### Tokens JWT
 
-No existe soporte para tokens JWT en esta bifurcacion, sientanse libres de
+No existe soporte para tokens JWT en esta bifurcación, sientanse libres de
 enviar (pull request)[https://github.com/tecnocen-com/yii2-oauth2-server/pulls]
 para habilitar esta funcionalidad.
 
@@ -73,10 +73,6 @@ para habilitar esta funcionalidad.
 La clase proporcionada en `Yii::$app->user->identityClass` debe implementar la
 interface `OAuth2\Storage\UserCredentialsInterface` para poder almacenar
 credenciales de oauth2.
-
-The class passed to `Yii::$app->user->identityClass` must implement the interface
-`\OAuth2\Storage\UserCredentialsInterface`, to store oauth2 credentials in user
-table.
 
 ```php
 use Yii;
@@ -136,8 +132,8 @@ inserta credenciales de cliente de prueba `testclient:testpass` para
 
 ### Controladores
 
-Para soportar la autenticacion por token de acceso simplemente agrega los
-comportamientos a tu controlador o modulo.
+Para soportar la autenticación por token de acceso simplemente agrega los
+comportamientos a tu controlador o módulo.
 
 ```php
 use yii\helpers\ArrayHelper;
@@ -168,7 +164,7 @@ class Controller extends \yii\rest\Controller
 }
 ```
 
-El codigo de arriba es el mismo que la implementacion por defecto que puede ser
+El código de arriba es el mismo que la implementación por defecto que puede ser
 simplificado como:
 
 ```php
@@ -192,9 +188,9 @@ class Controller extends \yii\rest\Controller
 ### Alcances
 
 La propiedad `tecnocen\oauth2server\filters\auth\CompositeAuth::$actionScopes`
-determina que acciones requieren alcances (scope) especificos. Si esos alcances
-no son cubiertos la accion no sera ejecutado, y el servidor respondera con un
-Codigo de Estado HTTP 403.
+determina que acciones requieren alcances (scope) específicos. Si esos alcances
+no son cubiertos la acción no sera ejecutado, y el servidor responderá con un
+Código de Estado HTTP 403.
 
 ```php
 public function behaviors()
@@ -212,12 +208,12 @@ public function behaviors()
 }
 ```
 
-### Automaticamente Revocar Tokens
+### Automáticamente Revocar Tokens
 
-Algunas veces es necesario revocar el token con cada peticion para impedir que
-la misma peticion sea disparada dos veces.
+Algunas veces es necesario revocar el token con cada petición para impedir que
+la misma petición sea disparada dos veces.
 
-Para habilitar esta funcionalida es neesario implementar
+Para habilitar esta funcionalidad es necesario implementar
 `tecnocen\oauth2server\RevokeAccessTokenInterface` en la clase utilizada para
 identificar el usuario autenticado.
 
@@ -236,12 +232,11 @@ class User extend \yii\db\ActiveRecord implement
 }
 ```
 
-Despues usar la clase anterior como configuracion para
+Después usar la clase anterior como configuración para
 `Yii::$app->user->identityClass`.
 
-Agregar el filtro de accion 
-Attaching the action filter `tecnocen\oauth2server\filters\RevokeAccessToken`
-allows to configure the actions to automatically revoke the access token.
+Agregar el filtro de acción `tecnocen\oauth2server\filters\RevokeAccessToken`
+el cual permite configurar las acciones para revocar automáticamente el token de acceso.
 
 ```php
 public function behaviors()
@@ -283,13 +278,13 @@ var data = {
 
 ## Construido Con
 
-* Yii 2: El Rapido, Seguro y Profesional PHP Framework [http://www.yiiframework.com](http://www.yiiframework.com)
+* Yii 2: El Rápido, Seguro y Profesional PHP Framework [http://www.yiiframework.com](http://www.yiiframework.com)
 
-## Codigo de Conducta
+## Código de Conducta
 
 Por favor leer
 [CODE_OF_CONDUCT.md](https://github.com/tecnocen-com/yii2-oauth2-server/blob/master/CODE_OF_CONDUCT.md)
-para detalles en el codigo de conducta.
+para detalles en el código de conducta.
 
 ## Contribuir
 
